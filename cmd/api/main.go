@@ -20,6 +20,7 @@ func main() {
 		env:     env.GetString("ENV", "local"),
 		version: env.GetString("VERSION", "1.0.0"),
 		db: dbConfig{
+			addr:         env.GetString("DATABASE_URL", ""),
 			maxOpenConns: env.GetInt("DATABASE_MAX_OPEN_CONNS", 10),
 			maxIdleConns: env.GetInt("DATABASE_MAX_IDLE_CONNS", 10),
 			maxIdleTime:  env.GetString("DATABASE_MAX_OPEN_TIME", "5m"),
