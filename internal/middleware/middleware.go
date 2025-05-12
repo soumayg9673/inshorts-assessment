@@ -2,6 +2,8 @@ package middleware
 
 import (
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 type Middlewares func(http.Handler) http.Handler
@@ -21,14 +23,16 @@ type Middleware struct {
 	}
 }
 
-func NewMiddleware(env string) Middleware {
+func NewMiddleware(env string, logger *zap.Logger) Middleware {
 	return Middleware{
 		Middleware: &MiddlewareStore{
-			ENV: env,
+			ENV:    env,
+			Logger: logger,
 		},
 	}
 }
 
 type MiddlewareStore struct {
-	ENV string
+	ENV    string
+	Logger *zap.Logger
 }
