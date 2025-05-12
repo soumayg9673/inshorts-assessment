@@ -27,7 +27,7 @@ func NewDbStore(db *sql.DB, log *zap.Logger, env string) Database {
 			Logger: log,
 			ENV:    env,
 		},
-		V1: &v1db.DbStoreV1{
+		V1: &v1db.V1Db{
 			DB:  db,
 			LOG: log,
 			ENV: env,

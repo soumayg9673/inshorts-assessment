@@ -1,21 +1,21 @@
 package v1db
 
-func (ds *DbStoreV1) GetNewsByCategory() {
+func (ds *V1Db) GetNewsByCategory() {
 
 }
 
-func (ds *DbStoreV1) GetNewsByScore() {
+func (ds *V1Db) GetNewsByScore() {
 
 }
 
-func (ds *DbStoreV1) GetNewsBySearch() {
+func (ds *V1Db) GetNewsBySearch() {
 
 }
 
-func (ds *DbStoreV1) GetNewsBySource() {
+func (ds *V1Db) GetNewsBySource() {
 
 }
 
-func (ds *DbStoreV1) GetNewsByNearby() {
+func (ds *V1Db) GetNewsByNearby() {
 
 }
