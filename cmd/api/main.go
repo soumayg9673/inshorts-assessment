@@ -6,6 +6,7 @@ import (
 	"github.com/soumayg9673/inshorts-assessment/internal/env"
 	"github.com/soumayg9673/inshorts-assessment/internal/middleware"
 	"github.com/soumayg9673/inshorts-assessment/internal/repository"
+	"github.com/soumayg9673/inshorts-assessment/internal/service"
 	"go.uber.org/zap"
 )
 
@@ -54,8 +55,10 @@ func main() {
 		zap.String("env", cfg.env),
 	)
 
-	database := database.NewDbStore(db, logger, cfg.env)
-	repository := repository.NewRpoStore(database, logger, cfg.env)
+	dtb := database.NewDbStore(db, logger, cfg.env)
+	rpo := repository.NewRpoStore(dtb, logger, cfg.env)
+	svc := service.NewServiceStore(rpo, logger, cfg.env)
+
 	middleware := middleware.NewMiddleware(cfg.env, logger)
 
 	app := &application{
