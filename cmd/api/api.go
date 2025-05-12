@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/soumayg9673/inshorts-assessment/internal/handlers"
 	"github.com/soumayg9673/inshorts-assessment/internal/middleware"
 	"github.com/soumayg9673/inshorts-assessment/internal/service"
 	"go.uber.org/zap"
@@ -34,7 +35,7 @@ func (app *application) mount() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	api := http.NewServeMux()
-	// TODO: Register API routes
+	handlers.RegisterRoutes(mux, app.service)
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 
 	return mux
