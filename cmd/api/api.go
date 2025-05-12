@@ -52,5 +52,10 @@ func (app *application) run(mux *http.ServeMux) error {
 		IdleTimeout:  time.Second * 30,
 	}
 
+	app.logger.Info("server is up and running",
+		zap.String("addr", app.config.addr),
+		zap.String("env", app.config.env),
+	)
+
 	return srv.ListenAndServe()
 }
