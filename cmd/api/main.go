@@ -1,9 +1,8 @@
 package main
 
 import (
-	"log"
-
 	"github.com/joho/godotenv"
+	"github.com/soumayg9673/inshorts-assessment/internal/database"
 	"github.com/soumayg9673/inshorts-assessment/internal/env"
 	"github.com/soumayg9673/inshorts-assessment/internal/middleware"
 	"go.uber.org/zap"
@@ -36,6 +35,24 @@ func main() {
 	}
 	defer logger.Sync()
 
+	// Database
+	db, err := database.NewDatabaseConn(
+		cfg.db.addr,
+		cfg.db.maxOpenConns,
+		cfg.db.maxIdleConns,
+		cfg.db.maxIdleTime,
+		cfg.env,
+	)
+	if err != nil {
+		logger.Panic(err.Error(),
+			zap.String("env", cfg.env),
+		)
+	}
+	defer db.Close()
+	logger.Info("connected to the database with connection pooling",
+		zap.String("env", cfg.env),
+	)
+
 	middleware := middleware.NewMiddleware(cfg.env, logger)
 
 	app := &application{
@@ -46,6 +63,8 @@ func main() {
 
 	mux := app.mount()
 	if err := app.run(mux); err != nil {
-		log.Fatalln(err.Error())
+		logger.Fatal(err.Error(),
+			zap.String("env", cfg.env),
+		)
 	}
 }
