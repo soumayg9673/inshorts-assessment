@@ -6,7 +6,7 @@ import (
 )
 
 type V1Rpo struct {
-	DB  v1db.V1Db
+	DB  v1db.V1
 	LOG *zap.Logger
 	ENV string
 }
