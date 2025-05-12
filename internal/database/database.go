@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 
+	v1db "github.com/soumayg9673/inshorts-assessment/internal/database/v1"
 	"go.uber.org/zap"
 )
 
@@ -16,14 +17,20 @@ type Database struct {
 	Database interface {
 		QueryRandom()
 	}
+	V1 v1db.V1
 }
 
-func NewDatabase(db *sql.DB, log *zap.Logger, env string) Database {
+func NewDbStore(db *sql.DB, log *zap.Logger, env string) Database {
 	return Database{
 		Database: &DbStore{
 			DB:     db,
 			Logger: log,
 			ENV:    env,
+		},
+		V1: &v1db.DbStoreV1{
+			DB:  db,
+			LOG: log,
+			ENV: env,
 		},
 	}
 }

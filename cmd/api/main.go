@@ -53,6 +53,7 @@ func main() {
 		zap.String("env", cfg.env),
 	)
 
+	// database := database.NewDbStore(db, logger, cfg.env)
 	middleware := middleware.NewMiddleware(cfg.env, logger)
 
 	app := &application{
