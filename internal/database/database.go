@@ -8,9 +8,9 @@ import (
 )
 
 type DbStore struct {
-	DB     *sql.DB
-	Logger *zap.Logger
-	ENV    string
+	DB  *sql.DB
+	LOG *zap.Logger
+	ENV string
 }
 
 type Database struct {
@@ -23,9 +23,9 @@ type Database struct {
 func NewDbStore(db *sql.DB, log *zap.Logger, env string) Database {
 	return Database{
 		Database: &DbStore{
-			DB:     db,
-			Logger: log,
-			ENV:    env,
+			DB:  db,
+			LOG: log,
+			ENV: env,
 		},
 		V1: &v1db.V1Db{
 			DB:  db,
