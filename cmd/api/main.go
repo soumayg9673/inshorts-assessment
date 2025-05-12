@@ -63,6 +63,7 @@ func main() {
 
 	app := &application{
 		config:     cfg,
+		service:    svc,
 		logger:     logger,
 		middleware: middleware,
 	}

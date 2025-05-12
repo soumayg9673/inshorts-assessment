@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/soumayg9673/inshorts-assessment/internal/middleware"
+	"github.com/soumayg9673/inshorts-assessment/internal/service"
 	"go.uber.org/zap"
 )
 
@@ -24,6 +25,7 @@ type config struct {
 
 type application struct {
 	config     config
+	service    service.Service
 	logger     *zap.Logger
 	middleware middleware.Middleware
 }
