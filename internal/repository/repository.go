@@ -6,11 +6,6 @@ import (
 	"go.uber.org/zap"
 )
 
-type RepoStore struct {
-	Logger *zap.Logger
-	ENV    string
-}
-
 type Repository struct {
 	V1 v1rpo.V1
 }
