@@ -5,6 +5,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/soumayg9673/inshorts-assessment/internal/env"
+	"github.com/soumayg9673/inshorts-assessment/internal/middleware"
+	"go.uber.org/zap"
 )
 
 func init() {
@@ -27,8 +29,19 @@ func main() {
 		},
 	}
 
+	// Logger
+	logger := zap.Must(zap.NewProduction())
+	if env.GetString("ENV", "local") == "local" {
+		logger = zap.Must(zap.NewDevelopment())
+	}
+	defer logger.Sync()
+
+	middleware := middleware.NewMiddleware(cfg.env, logger)
+
 	app := &application{
-		config: cfg,
+		config:     cfg,
+		logger:     logger,
+		middleware: middleware,
 	}
 
 	mux := app.mount()

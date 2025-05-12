@@ -20,6 +20,7 @@ func CreateStack(xs ...Middlewares) Middlewares {
 
 type Middleware struct {
 	Middleware interface {
+		LoggingMiddleware(http.Handler) http.Handler
 	}
 }
 

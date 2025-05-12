@@ -3,6 +3,9 @@ package main
 import (
 	"net/http"
 	"time"
+
+	"github.com/soumayg9673/inshorts-assessment/internal/middleware"
+	"go.uber.org/zap"
 )
 
 type dbConfig struct {
@@ -20,7 +23,9 @@ type config struct {
 }
 
 type application struct {
-	config config
+	config     config
+	logger     *zap.Logger
+	middleware middleware.Middleware
 }
 
 func (app *application) mount() *http.ServeMux {
@@ -35,9 +40,13 @@ func (app *application) mount() *http.ServeMux {
 
 func (app *application) run(mux *http.ServeMux) error {
 
+	stack := middleware.CreateStack(
+		app.middleware.Middleware.LoggingMiddleware,
+	)
+
 	srv := http.Server{
 		Addr:         app.config.addr,
-		Handler:      mux,
+		Handler:      stack(mux),
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 30,
