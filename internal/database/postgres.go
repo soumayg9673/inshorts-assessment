@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 func NewDatabaseConn(addr string, maxOpenConns, maxIdleConns int, maxIdleTime string, env string) (*sql.DB, error) {
