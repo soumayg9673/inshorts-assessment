@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/joho/godotenv"
 	"github.com/soumayg9673/inshorts-assessment/internal/database"
 	"github.com/soumayg9673/inshorts-assessment/internal/env"
@@ -66,6 +68,13 @@ func main() {
 		service:    svc,
 		logger:     logger,
 		middleware: middleware,
+	}
+
+	if os.Args[1] == "insert" {
+		insertInitialData(db)
+		logger.Info("data insert successful",
+			zap.String("env", cfg.env),
+		)
 	}
 
 	mux := app.mount()
