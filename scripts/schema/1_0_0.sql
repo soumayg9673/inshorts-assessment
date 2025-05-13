@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS news_articles (
     id UUID PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT,
-    url TEXT UNIQUE NOT NULL,
+    url TEXT NOT NULL,
     publication_date TIMESTAMP,
     source_id INT,
     relevance_score FLOAT,
