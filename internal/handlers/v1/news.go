@@ -1,6 +1,8 @@
 package v1hdr
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func (h *V1Hdr) news() {
 	mux := http.NewServeMux()
@@ -11,5 +13,14 @@ func (h *V1Hdr) news() {
 }
 
 func (h *V1Hdr) GetNewsByCategory(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	/*
+		Validate key "cat" in query parameters
+		Return statusCode = 400 BAD REQUEST (if "cat" not found in query parameters)
+	*/
+	if _, ok := q["cat"]; !ok {
+		w.WriteHeader(400)
+		return
+	}
 	w.WriteHeader(200)
 }
