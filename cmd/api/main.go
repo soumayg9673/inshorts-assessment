@@ -70,7 +70,7 @@ func main() {
 		middleware: middleware,
 	}
 
-	if os.Args[1] == "insert" {
+	if len(os.Args) > 1 && os.Args[1] == "insert" {
 		insertInitialData(db)
 		logger.Info("data insert successful",
 			zap.String("env", cfg.env),
