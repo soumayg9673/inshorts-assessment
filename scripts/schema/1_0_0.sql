@@ -1,11 +1,11 @@
 -- Create source table
 CREATE TABLE IF NOT EXISTS news_sources (
     id SERIAL PRIMARY KEY,
-    source_name TEXT NOT NULL,
-    source_identifier TEXT
+    source_name VARCHAR(150) NOT NULL
 );
 
-CREATE UNIQUE INDEX idx_news_sources_source_identifier ON news_sources (source_identifier);
+CREATE EXTENSION postgis;
+
 CREATE INDEX idx_news_sources_source_name ON news_sources (source_name);
 
 -- Create category table
@@ -43,9 +43,6 @@ CREATE INDEX idx_news_articles_source_id ON news_articles (source_id);
 -- Geospatial index (MUST for location queries)
 CREATE INDEX idx_news_articles_location ON news_articles USING GIST (location);
 
--- Optional: partial index for recent news only
-CREATE INDEX idx_recent_articles ON news_articles (publication_date)
-WHERE publication_date > now() - interval '30 days';
 
 -- Create article category table
 CREATE TABLE IF NOT EXISTS news_article_categories (
