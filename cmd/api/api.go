@@ -35,7 +35,7 @@ func (app *application) mount() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	api := http.NewServeMux()
-	handlers.RegisterRoutes(mux, app.service)
+	handlers.RegisterRoutes(api, app.service)
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 
 	return mux
