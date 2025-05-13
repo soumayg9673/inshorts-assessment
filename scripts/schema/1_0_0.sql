@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS news_sources (
     source_identifier TEXT
 );
 
-
+-- Create category table
 CREATE TABLE IF NOT EXISTS news_categories (
     id SERIAL PRIMARY KEY,
     category_name VARCHAR(255) NOT NULL,
@@ -21,8 +21,7 @@ CREATE TABLE IF NOT EXISTS news_articles (
     publication_date TIMESTAMP,
     source_id INT,
     relevance_score FLOAT,
-    latitude DOUBLE PRECISION,
-    longitude DOUBLE PRECISION,
+    location GEOGRAPHY(Point, 4326),
     FOREIGN KEY (source_id) REFERENCES news_sources(id)
 );
 
