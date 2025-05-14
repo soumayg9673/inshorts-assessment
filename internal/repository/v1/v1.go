@@ -2,6 +2,7 @@ package v1rpo
 
 import (
 	v1db "github.com/soumayg9673/inshorts-assessment/internal/database/v1"
+	newsv1 "github.com/soumayg9673/inshorts-assessment/internal/models/v1/news"
 	"go.uber.org/zap"
 )
 
@@ -12,7 +13,7 @@ type V1Rpo struct {
 }
 
 type V1 interface {
-	GetNewsByCategory()
+	GetNewsByCategory([]string) ([]newsv1.NewsSql, error)
 	GetNewsByScore()
 	GetNewsBySearch()
 	GetNewsBySource()

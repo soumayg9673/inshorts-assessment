@@ -1,7 +1,38 @@
 package v1rpo
 
-func (rp *V1Rpo) GetNewsByCategory() {
+import (
+	newsv1 "github.com/soumayg9673/inshorts-assessment/internal/models/v1/news"
+	"go.uber.org/zap"
+)
 
+func (rp *V1Rpo) GetNewsByCategory(q []string) ([]newsv1.NewsSql, error) {
+	rows, err := rp.DB.GetNewsByCategory(q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	news := []newsv1.NewsSql{}
+
+	for rows.Next() {
+		itr := newsv1.NewsSql{}
+		if err := rows.Scan(
+			&itr.Title,
+			&itr.Description,
+			&itr.Url,
+			&itr.PubDate,
+			&itr.Source,
+			&itr.Category,
+			&itr.RevScore,
+			&itr.Latitude,
+			&itr.Longitude,
+		); err != nil {
+			rp.LOG.Debug(err.Error(), zap.String("env", rp.ENV))
+			return news, err
+		}
+		news = append(news, itr)
+	}
+	return news, nil
 }
 
 func (rp *V1Rpo) GetNewsByScore() {
