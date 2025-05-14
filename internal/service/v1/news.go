@@ -1,7 +1,31 @@
 package v1svc
 
-func (sc *V1Svc) GetNewsByCategory() {
+import (
+	newsv1 "github.com/soumayg9673/inshorts-assessment/internal/models/v1/news"
+)
 
+func (sc *V1Svc) GetNewsByCategory(q []string) ([]newsv1.NewsApi, error) {
+	news, err := sc.RPO.GetNewsByCategory(q)
+	if err != nil {
+		return nil, err
+	}
+
+	data := []newsv1.NewsApi{}
+	for _, n := range news {
+		data = append(data, newsv1.NewsApi{
+			Title:       n.Title,
+			Description: n.Description,
+			Url:         n.Url,
+			PubDate:     n.PubDate,
+			Source:      n.Source,
+			Category:    n.Category,
+			RevScore:    n.RevScore,
+			// TODO: add llm_summary
+			Latitude:  n.Latitude,
+			Longitude: n.Longitude,
+		})
+	}
+	return data, nil
 }
 
 func (sc *V1Svc) GetNewsByScore() {
