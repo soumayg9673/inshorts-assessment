@@ -13,7 +13,7 @@ type V1Db struct {
 }
 
 type V1 interface {
-	GetNewsByCategory()
+	GetNewsByCategory([]string) (*sql.Rows, error)
 	GetNewsByScore()
 	GetNewsBySearch()
 	GetNewsBySource()
