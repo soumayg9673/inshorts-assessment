@@ -2,6 +2,7 @@ package v1db
 
 import (
 	"database/sql"
+	"strings"
 
 	"go.uber.org/zap"
 )
@@ -9,15 +10,15 @@ import (
 func (ds *V1Db) GetNewsByCategory(q []string) (*sql.Rows, error) {
 	const query = `
 	SELECT 
-		na.id,
 		na.title,
 		na.description,
+		na.url,
 		na.publication_date,
-		na.relevance_score,
 		ns.source_name,
 		nc.category_name,
-		ST_X(na."location"::geometry) AS longitude,
-		ST_Y(na."location"::geometry) AS latitude
+		na.relevance_score,
+		ST_Y(na."location"::geometry) AS latitude,
+		ST_X(na."location"::geometry) AS longitude
 	FROM news_article_categories nac 
 	JOIN news_categories nc ON nc.id  = nac.category_id AND nc.id IN ($1)
 	JOIN news_articles na ON na.id = nac.article_id
@@ -26,7 +27,7 @@ func (ds *V1Db) GetNewsByCategory(q []string) (*sql.Rows, error) {
 	LIMIT 5;
 	`
 
-	rows, err := ds.DB.Query(query, q)
+	rows, err := ds.DB.Query(query, strings.Join(q, ","))
 	if err != nil {
 		ds.LOG.Debug(err.Error(),
 			zap.String("env", ds.ENV),
