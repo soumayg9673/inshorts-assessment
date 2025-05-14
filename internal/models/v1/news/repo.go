@@ -8,6 +8,6 @@ type NewsSql struct {
 	Source      string
 	Category    string
 	RevScore    float32
-	Latitude    string
-	Longitude   string
+	Latitude    float32
+	Longitude   float32
 }
