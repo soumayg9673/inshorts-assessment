@@ -40,8 +40,39 @@ func (ds *V1Db) GetNewsByCategory(q []string) (*sql.Rows, error) {
 	return rows, nil
 }
 
-func (ds *V1Db) GetNewsByScore() {
+func (ds *V1Db) GetNewsByScore() (*sql.Rows, error) {
+	const query = `
+	SELECT
+		na.id,
+		na.title,
+		na.description,
+		na.url,
+		na.publication_date,
+		ns.source_name,
+		STRING_AGG(nc.category_name, ', ') AS categories,
+		na.relevance_score,
+		na.llm_summary,
+		ST_Y(na.location::geometry) AS latitude,
+		ST_X(na.location::geometry) AS longitude
+	FROM news_articles na
+	JOIN news_sources ns ON ns.id = na.source_id
+	JOIN news_article_categories nac ON nac.article_id = na.id
+	JOIN news_categories nc ON nc.id = nac.category_id
+	WHERE na.relevance_score > 0.7
+	GROUP BY na.id, ns.source_name
+	ORDER BY na.publication_date DESC, na.relevance_score desc
+	LIMIT 5;
+	`
 
+	rows, err := ds.DB.Query(query)
+	if err != nil {
+		ds.LOG.Debug(err.Error(),
+			zap.String("env", ds.ENV),
+		)
+		return nil, err
+	}
+
+	return rows, nil
 }
 
 func (ds *V1Db) GetNewsBySearch() {

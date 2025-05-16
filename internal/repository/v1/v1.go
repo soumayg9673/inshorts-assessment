@@ -14,7 +14,7 @@ type V1Rpo struct {
 
 type V1 interface {
 	GetNewsByCategory([]string) ([]newsv1.NewsSql, error)
-	GetNewsByScore()
+	GetNewsByScore() ([]newsv1.NewsSql, error)
 	GetNewsBySearch()
 	GetNewsBySource()
 	GetNewsByNearby()

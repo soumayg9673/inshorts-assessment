@@ -35,8 +35,34 @@ func (sc *V1Svc) GetNewsByCategory(q []string) ([]newsv1.NewsApi, error) {
 	return data, nil
 }
 
-func (sc *V1Svc) GetNewsByScore() {
+func (sc *V1Svc) GetNewsByScore() ([]newsv1.NewsApi, error) {
+	//TODO: check cache if exists with category id and timestamp
+	news, err := sc.RPO.GetNewsByScore()
+	if err != nil {
+		return nil, err
+	}
 
+	data := []newsv1.NewsApi{}
+	for _, n := range news {
+		llmSummary := n.LlmSummary.String
+		if !n.LlmSummary.Valid {
+			llmSummary = sc.Llm.GeminiAi.QueryText(gemini.GeminiMdl.Gemini_2_0_Flash, n.Url)
+			go sc.RPO.PatchLlmSummary(n.Id, llmSummary)
+		}
+		data = append(data, newsv1.NewsApi{
+			Title:       n.Title,
+			Description: n.Description,
+			Url:         n.Url,
+			PubDate:     n.PubDate,
+			Source:      n.Source,
+			Category:    n.Category,
+			RevScore:    n.RevScore,
+			LlmSummary:  llmSummary,
+			Latitude:    n.Latitude,
+			Longitude:   n.Longitude,
+		})
+	}
+	return data, nil
 }
 
 func (sc *V1Svc) GetNewsBySearch() {

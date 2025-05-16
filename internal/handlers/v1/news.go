@@ -11,6 +11,7 @@ func (h *V1Hdr) news() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /category", h.GetNewsByCategory)
+	mux.HandleFunc("GET /score", h.GetNewsByScore)
 
 	h.MUX.Handle("/news/", http.StripPrefix("/news", mux))
 }
@@ -29,6 +30,15 @@ func (h *V1Hdr) GetNewsByCategory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data, err := h.SVC.GetNewsByCategory(q["cat"])
+	if err != nil {
+		cjson.WriteJSONError(w, errors.SomethingWentWrong())
+		return
+	}
+	cjson.WriteJSON(w, 200, data)
+}
+
+func (h *V1Hdr) GetNewsByScore(w http.ResponseWriter, r *http.Request) {
+	data, err := h.SVC.GetNewsByScore()
 	if err != nil {
 		cjson.WriteJSONError(w, errors.SomethingWentWrong())
 		return

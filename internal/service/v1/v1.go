@@ -16,7 +16,7 @@ type V1Svc struct {
 
 type V1 interface {
 	GetNewsByCategory([]string) ([]newsv1.NewsApi, error)
-	GetNewsByScore()
+	GetNewsByScore() ([]newsv1.NewsApi, error)
 	GetNewsBySearch()
 	GetNewsBySource()
 	GetNewsByNearby()
