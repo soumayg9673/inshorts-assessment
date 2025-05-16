@@ -1,12 +1,15 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"log"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/soumayg9673/inshorts-assessment/internal/llm/gemini"
 )
 
 type newsItem struct {
@@ -26,7 +29,7 @@ func slugify(s string) string {
 	return strings.ToLower(strings.ReplaceAll(s, " ", "_"))
 }
 
-func insertInitialData(db *sql.DB) {
+func (app *application) insertInitialData(db *sql.DB, ctx context.Context) {
 	// Read JSON
 	file, err := os.ReadFile("scripts/data/news_data.json")
 	if err != nil {
@@ -82,6 +85,8 @@ func insertInitialData(db *sql.DB) {
 		if err != nil {
 			log.Fatalf("Article insert error: %v", err)
 		}
+
+		go app.llm.GeminiAi.QueryText(gemini.GeminiMdl.Gemini_2_0_Flash, item.URL)
 
 		// Insert Categories and Map
 		for _, cat := range item.Category {

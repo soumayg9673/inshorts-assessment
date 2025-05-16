@@ -72,11 +72,12 @@ func main() {
 		config:     cfg,
 		service:    svc,
 		logger:     logger,
+		llm:        llm,
 		middleware: middleware,
 	}
 
 	if len(os.Args) > 1 && os.Args[1] == "insert" {
-		insertInitialData(db)
+		app.insertInitialData(db, ctx)
 		logger.Info("data insert successful",
 			zap.String("env", cfg.env),
 		)
