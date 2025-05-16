@@ -16,6 +16,7 @@ func NewServiceStore(rpo repository.Repository, log *zap.Logger, llm llm.Llm, en
 		V1: &v1svc.V1Svc{
 			RPO: rpo.V1,
 			LOG: log,
+			Llm: llm,
 			ENV: env,
 		},
 	}
