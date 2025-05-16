@@ -16,7 +16,7 @@ type V1 interface {
 	GetNewsByCategory([]string) (*sql.Rows, error)
 	GetNewsByScore() (*sql.Rows, error)
 	GetNewsBySearch()
-	GetNewsBySource()
+	GetNewsBySource(int) (*sql.Rows, error)
 	GetNewsByNearby()
 	PatchLlmSummary(string, string) *sql.Row
 }

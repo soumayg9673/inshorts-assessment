@@ -73,8 +73,36 @@ func (rp *V1Rpo) GetNewsBySearch() {
 
 }
 
-func (rp *V1Rpo) GetNewsBySource() {
+func (rp *V1Rpo) GetNewsBySource(s int) ([]newsv1.NewsSql, error) {
+	rows, err := rp.DB.GetNewsBySource(s)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
+	news := []newsv1.NewsSql{}
+
+	for rows.Next() {
+		itr := newsv1.NewsSql{}
+		if err := rows.Scan(
+			&itr.Id,
+			&itr.Title,
+			&itr.Description,
+			&itr.Url,
+			&itr.PubDate,
+			&itr.Source,
+			&itr.Category,
+			&itr.RevScore,
+			&itr.LlmSummary,
+			&itr.Latitude,
+			&itr.Longitude,
+		); err != nil {
+			rp.LOG.Debug(err.Error(), zap.String("env", rp.ENV))
+			return news, err
+		}
+		news = append(news, itr)
+	}
+	return news, nil
 }
 
 func (rp *V1Rpo) GetNewsByNearby() {

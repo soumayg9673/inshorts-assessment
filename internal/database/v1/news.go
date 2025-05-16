@@ -79,8 +79,39 @@ func (ds *V1Db) GetNewsBySearch() {
 
 }
 
-func (ds *V1Db) GetNewsBySource() {
+func (ds *V1Db) GetNewsBySource(s int) (*sql.Rows, error) {
+	const query = `
+	SELECT
+		na.id,
+		na.title,
+		na.description,
+		na.url,
+		na.publication_date,
+		ns.source_name,
+		STRING_AGG(nc.category_name, ', ') AS categories,
+		na.relevance_score,
+		na.llm_summary,
+		ST_Y(na.location::geometry) AS latitude,
+		ST_X(na.location::geometry) AS longitude
+	FROM news_articles na
+	JOIN news_sources ns ON ns.id = na.source_id
+	JOIN news_article_categories nac ON nac.article_id = na.id
+	JOIN news_categories nc ON nc.id = nac.category_id
+	WHERE na.source_id = $1
+	GROUP BY na.id, ns.source_name
+	ORDER BY na.publication_date DESC
+	LIMIT 5;
+	`
 
+	rows, err := ds.DB.Query(query, s)
+	if err != nil {
+		ds.LOG.Debug(err.Error(),
+			zap.String("env", ds.ENV),
+		)
+		return nil, err
+	}
+
+	return rows, nil
 }
 
 func (ds *V1Db) GetNewsByNearby() {

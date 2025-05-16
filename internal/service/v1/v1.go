@@ -18,6 +18,6 @@ type V1 interface {
 	GetNewsByCategory([]string) ([]newsv1.NewsApi, error)
 	GetNewsByScore() ([]newsv1.NewsApi, error)
 	GetNewsBySearch()
-	GetNewsBySource()
+	GetNewsBySource(int) ([]newsv1.NewsApi, error)
 	GetNewsByNearby()
 }
