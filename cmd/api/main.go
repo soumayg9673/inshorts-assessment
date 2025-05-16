@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -58,8 +59,9 @@ func main() {
 		zap.String("env", cfg.env),
 	)
 
-	llm := llm.NewLlmStore(logger)
+	ctx := context.Background()
 
+	llm := llm.NewLlmStore(logger, ctx)
 	dtb := database.NewDbStore(db, logger, cfg.env)
 	rpo := repository.NewRpoStore(dtb, logger, cfg.env)
 	svc := service.NewServiceStore(rpo, logger, llm, cfg.env)
