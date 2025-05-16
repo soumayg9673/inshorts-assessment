@@ -18,4 +18,5 @@ type V1 interface {
 	GetNewsBySearch()
 	GetNewsBySource()
 	GetNewsByNearby()
+	PatchLlmSummary(string, string) *sql.Row
 }

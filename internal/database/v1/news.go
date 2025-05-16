@@ -10,6 +10,7 @@ import (
 func (ds *V1Db) GetNewsByCategory(q []string) (*sql.Rows, error) {
 	const query = `
 	SELECT 
+		na.id,
 		na.title,
 		na.description,
 		na.url,
@@ -17,6 +18,7 @@ func (ds *V1Db) GetNewsByCategory(q []string) (*sql.Rows, error) {
 		ns.source_name,
 		nc.category_name,
 		na.relevance_score,
+		na.llm_summary,
 		ST_Y(na."location"::geometry) AS latitude,
 		ST_X(na."location"::geometry) AS longitude
 	FROM news_article_categories nac 
@@ -52,4 +54,15 @@ func (ds *V1Db) GetNewsBySource() {
 
 func (ds *V1Db) GetNewsByNearby() {
 
+}
+
+func (ds *V1Db) PatchLlmSummary(id, ls string) *sql.Row {
+	const query = `
+	UPDATE news_articles
+	SET llm_summary = $1
+	WHERE id = $2
+	RETURNING 1
+	`
+	rows := ds.DB.QueryRow(query, ls, id)
+	return rows
 }
