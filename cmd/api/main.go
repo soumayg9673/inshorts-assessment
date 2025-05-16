@@ -6,6 +6,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/soumayg9673/inshorts-assessment/internal/database"
 	"github.com/soumayg9673/inshorts-assessment/internal/env"
+	"github.com/soumayg9673/inshorts-assessment/internal/llm"
 	"github.com/soumayg9673/inshorts-assessment/internal/middleware"
 	"github.com/soumayg9673/inshorts-assessment/internal/repository"
 	"github.com/soumayg9673/inshorts-assessment/internal/service"
@@ -57,9 +58,11 @@ func main() {
 		zap.String("env", cfg.env),
 	)
 
+	llm := llm.NewLlmStore(logger)
+
 	dtb := database.NewDbStore(db, logger, cfg.env)
 	rpo := repository.NewRpoStore(dtb, logger, cfg.env)
-	svc := service.NewServiceStore(rpo, logger, cfg.env)
+	svc := service.NewServiceStore(rpo, logger, llm, cfg.env)
 
 	middleware := middleware.NewMiddleware(cfg.env, logger)
 
