@@ -24,12 +24,12 @@ func (h *V1Hdr) GetNewsByCategory(w http.ResponseWriter, r *http.Request) {
 		1. if "cat" not found in query parameters
 		2. Key "cat" have no value
 	*/
-	if v, ok := q["cat"]; len(v) == 0 || !ok {
+	if v, ok := q["query"]; len(v) == 0 || !ok {
 		cjson.WriteJSONError(w, errors.BadRequst())
 		return
 	}
 
-	data, err := h.SVC.GetNewsByCategory(q["cat"])
+	data, err := h.SVC.GetNewsByCategory(q["query"])
 	if err != nil {
 		cjson.WriteJSONError(w, errors.SomethingWentWrong())
 		return
