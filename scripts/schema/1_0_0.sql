@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS news_articles (
     publication_date TIMESTAMP,
     source_id INT,
     relevance_score FLOAT,
-    ll_summary TEXT,
+    llm_summary TEXT,
     location GEOGRAPHY(Point, 4326),
     FOREIGN KEY (source_id) REFERENCES news_sources(id)
 );
