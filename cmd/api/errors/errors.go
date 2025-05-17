@@ -2,7 +2,7 @@ package errors
 
 type ErrorMdl struct {
 	Code    string `json:"code"`
-	Message string `json:"message"`
+	Message any    `json:"message"`
 }
 
 type Error struct {

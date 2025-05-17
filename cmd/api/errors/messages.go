@@ -19,3 +19,13 @@ func BadRequst() Error {
 		},
 	}
 }
+
+func BadRequstMessage(msg any) Error {
+	return Error{
+		Status: 400,
+		Error: ErrorMdl{
+			Code:    "bad_request",
+			Message: msg,
+		},
+	}
+}
